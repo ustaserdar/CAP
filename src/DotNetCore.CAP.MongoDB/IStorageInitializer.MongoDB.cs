@@ -111,7 +111,12 @@ public class MongoDBStorageInitializer : IStorageInitializer
                     Background = true
                 };
                 var indexBuilder = Builders<T>.IndexKeys;
-                return new CreateIndexModel<T>(indexBuilder.Descending(indexName), indexOptions);
+                return _options.Value.IndexSorting switch
+                {
+                    (int)IndexSorting.Descending => new CreateIndexModel<T>(indexBuilder.Descending(indexName), indexOptions),
+                    (int)IndexSorting.Ascending =>  new CreateIndexModel<T>(indexBuilder.Ascending(indexName), indexOptions),
+                    _ =>  new CreateIndexModel<T>(indexBuilder.Descending(indexName), indexOptions),
+                };
             }).ToArray();
 
             await col.Indexes.CreateManyAsync(indexes, cancellationToken).ConfigureAwait(false);

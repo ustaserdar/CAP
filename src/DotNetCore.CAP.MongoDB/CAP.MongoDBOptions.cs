@@ -36,6 +36,12 @@ public class MongoDBOptions
     /// </summary>
     public string LockCollection { get; set; } = "cap.lock";
 
+    /// <summary>
+    /// MongoDB collection index sorting type.
+    /// Default value: Descending
+    /// </summary>
+    /// <value></value>
+    public int IndexSorting { get; set; } = -1;
 
     internal string Version { get; set; } = default!;
 }
